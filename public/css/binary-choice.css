@@ -1,0 +1,42 @@
+.container-multi-choice {
+  /* overflow-y: auto; */
+  position: relative;
+  display: flex;
+  margin: auto;
+ justify-content: center;  
+} 
+
+
+.container-multi-choice-column {
+
+}
+
+
+#multiattribute-choices-stimulus-left {
+background-size: cover;
+position: fixed;
+border: 3px solid white;
+box-sizing: border-box;
+top: 50%;
+left: 25%;
+transform: translate(-50%, -50%);
+
+}
+
+#multiattribute-choices-stimulus-right {
+background-size: cover;
+position: fixed;
+border: 3px solid white;
+box-sizing: border-box;
+top: 50%;
+left: 75%;
+transform: translate(-50%, -50%);
+}
+
+
+.img_stimuli {
+  /* max-width: 100%; */
+  max-height: 100%;
+  display: block; /* remove extra space below image */
+}
+

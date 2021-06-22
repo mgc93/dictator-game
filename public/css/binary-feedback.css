@@ -1,0 +1,63 @@
+.container-multi-choice {
+  /* overflow-y: auto; */
+  position: relative;
+  display: flex;
+  margin: auto;
+ justify-content: center;  
+} 
+
+
+.container-multi-choice-column {
+
+}
+
+
+#multiattribute-choices-stimulus-top {
+background-size: cover;
+position: fixed;
+border: 3px solid white;
+box-sizing: border-box;
+top: 30%;
+left: 50%;
+transform: translate(-50%, -50%);
+
+}
+
+#multiattribute-choices-stimulus-bottom {
+background-size: cover;
+position: fixed;
+border: 3px solid white;
+box-sizing: border-box;
+top: 70%;
+left: 50%;
+transform: translate(-50%, -50%);
+}
+
+#multiattribute-choices-stimulus-top-points {
+position: absolute;
+top: 50%;
+left: 50%;
+font-size: 80px;
+font-family: sans-serif;
+font-weight: bold;
+color: white;
+transform: translate(-50%, -50%)
+}
+
+#multiattribute-choices-stimulus-bottom-points {
+position: absolute;
+top: 50%;
+left: 50%;
+font-size: 80px;
+font-family: sans-serif;
+font-weight: bold;
+color: white;
+transform: translate(-50%, -50%)
+}
+
+
+.img_stimuli {
+  /* max-width: 100%; */
+  max-height: 100%;
+  display: block; /* remove extra space below image */
+}

@@ -1,0 +1,46 @@
+.jspsych-display-element {
+  margin: 0px; 
+  height: 100%; 
+  width: 100%; 
+
+}
+
+
+#jspsych-html-slider-response-stimulus{
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, 0%);
+}
+
+.jspsych-html-slider-response-container {
+  /* position:relative;  */
+  position: fixed;
+  margin: 0 auto 3em auto;
+  height: 20vh; 
+  width: 80vw;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, 0%);
+}
+
+span{
+  text-align: center; 
+  font-size: 80%;
+}
+
+
+
+#prompt-question {
+  position: fixed;
+  top: 70%;
+  left: 50%;
+  transform: translate(-50%, 0%);
+}
+
+#jspsych-html-slider-response-next{
+  position: fixed;
+  top: 80%;
+  left: 50%;
+  transform: translate(-50%, 0%);
+}
