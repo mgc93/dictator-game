@@ -494,7 +494,7 @@ var game_choice = {
             }
         }      
     ],
-    loop_function: () => choice_count < 5, // change this to 60 after uploading
+    loop_function: () => choice_count < 15, // change this to 70 after uploading
 };
 
 
