@@ -23,7 +23,7 @@
     // (done) add prompt about exchange rate for the survey
     // add beginning and end labels to the sliders?
 // (done) instructions
-// control quizes
+// (done) control quizes
 // (done) payment 
 // (done) get rid of eyetracking leftover code
 // (done) add payment address, name etc. code
@@ -39,6 +39,7 @@
 // (done) change overview screen
 // change index consent form for no-eyetracking study
 // add bonus from give rate of another participant?
+// add new instructions - take out part about quiz for normative beliefs
 
 
 
@@ -164,7 +165,7 @@ for (var i = 1; i < 26; i++) {
 
 /** control questions images */
 var control_images = [];
-for (var i = 1; i < 3; i++){
+for (var i = 1; i < 2; i++){
     control_images.push('img/control/control_img_' + i + '.png');
 }
 
@@ -311,7 +312,7 @@ var choiceInstructions = {
 function getAnswersChoiceQuiz(choice_quiz_data){
     var nCorrect = 0;
     var responses = choice_quiz_data[0].responses.slice(1,choice_quiz_data[0].responses.length-1).split(',');
-    var correctAnswers = ["10","10","9","5","TRUE","TRUE"];
+    var correctAnswers = ["100","63","80","FALSE"];
     for(var i = 0; i < responses.length; i++){
         if(responses[i].includes(correctAnswers[i])){
             nCorrect = nCorrect + 1;
@@ -333,25 +334,18 @@ function getRandomInt(min, max) {
 
 
 // quiz about the choice task
-var question_choice_1_options = ["5",
-                        "7",
-                        "8",
-                        "9"];
-var question_choice_2_options = ["6",
-                        "7",
-                        "8",
-                        "9"];
-var question_choice_3_options = ["5",
-                        "6",
-                        "7",
-                        "8"];
-var question_choice_4_options = ["5",
-                        "6",
-                        "7",
-                        "8"];
-var question_choice_5_options = ["TRUE",
-                        "FALSE"];
-var question_choice_6_options = ["TRUE",
+var question_choice_1_options = ["0",
+                        "20",
+                        "100"];
+var question_choice_2_options = ["0",
+                        "20",
+                        "63",
+                        "250"];
+var question_choice_3_options = ["0",
+                        "20",
+                        "80",
+                        "100"];
+var question_choice_4_options = ["TRUE",
                         "FALSE"];
 
 // still to finish
@@ -360,18 +354,16 @@ var choice_quiz_data = [];
 var controlQuestionsChoice = {
     type: 'survey-multi-choice',
     questions: [
-        { prompt: "Question 1: If the COLUMN CHOOSER selects the column L and you select the row T, how many dollars will you earn?", name: 'Q1', options: question_choice_1_options, required: true },
-        { prompt: "Question 2: If the COLUMN CHOOSER selects the column L and you select the row T, how many dollars will they earn?", name: 'Q2', options: question_choice_2_options, required: true },
-        { prompt: "Question 3: If the COLUMN CHOOSER selects the column L and you select the row B, how many dollars will you earn?", name: 'Q3', options: question_choice_3_options, required: true },
-        { prompt: "Question 4: If the COLUMN CHOOSER selects the column L and you select the row B, how many dollars will they earn?", name: 'Q4', options: question_choice_4_options, required: true },
-        { prompt: "Question 5: The participant with whom you are paired will be determined randomly.", name: 'Q5', options: question_choice_5_options, required: true },
-        { prompt: "Question 6: When you make your choice, you will be able to see what the COLUMN CHOOSER has chosen.", name: 'Q6', options: question_choice_6_options, required: true }
+        { prompt: "Question 1: What is the maximum number of tokens that you can allocate to another anonymous participant?", name: 'Q1', options: question_choice_1_options, required: true },
+        { prompt: "Question 2: Suppose you decided to allocate 20 tokens to the other participant, as shown above. How many tokens will the other anonymous participant get?", name: 'Q2', options: question_choice_2_options, required: true },
+        { prompt: "Question 3: Suppose you decided to allocate 20 tokens to the other participant, as shown above. How many tokens are you left with?", name: 'Q3', options: question_choice_3_options, required: true },
+        { prompt: "Question 4: You will find out the identity of the other participant at the end of the experiment.", name: 'Q4', options: question_choice_4_options, required: true }
     ],
     preamble: `<div> 
         <br><br/>
         Please answer the following questions to begin today's study. Scroll down to see all questions.</div>
         <br><br/>
-        <div>Consider the following table.</div>
+        <div>Consider the following situation.</div>
     </div>
     <br><br/>
     <img class = 'img_questions' src="img/control/control_img_1.png"></img>
@@ -380,7 +372,7 @@ var controlQuestionsChoice = {
         choice_quiz_data.push(data);
         document.body.style.cursor = 'none';
         nCorrectChoice = getAnswersChoiceQuiz(choice_quiz_data);
-        if(nCorrectChoice<4){
+        if(nCorrectChoice<3){
             survey_code = makeSurveyCode('failed');
             closeFullscreen();
             jsPsych.endExperiment(`We are sorry! Unfortunately, you have answered only ${nCorrectChoice} questions correctly.  </br> You will receive ${payFailQuiz1} for making it this far. Your survey code is: ${survey_code}${payFailQuiz1}. Thank you for signing up!`);
@@ -530,7 +522,7 @@ var empiricalBeliefInstructions = {
 function getAnswersBeliefQuiz(belief_quiz_data){
     var nCorrect = 0;
     var responses = belief_quiz_data[0].responses.slice(1,belief_quiz_data[0].responses.length-1).split(',');
-    var correctAnswers = ["$5","$9","FALSE"];
+    var correctAnswers = ["$5","$11","FALSE"];
     for(var i = 0; i < responses.length; i++){
         if(responses[i].includes(correctAnswers[i])){
             nCorrect = nCorrect + 1;
@@ -559,19 +551,17 @@ var belief_quiz_data = [];
 var controlQuestionsBelief = {
     type: 'survey-multi-choice',
     questions: [
-        { prompt: "Question 1: Suppose you estimate that 60% of the other participants selected column L in this round. What will you earn if this decision is selected for payment?", name: 'Q1', options: question_belief_1_options, required: true },
-        { prompt: "Question 2: Suppose you estimate that 87% of the other participants selected column L in this round. What will you earn if this decision is selected for payment?", name: 'Q2', options: question_belief_2_options, required: true },
+        { prompt: "Question 1: Suppose you estimate that 40% of the participants gave between 20 and 30 tokens. What will you earn if this decision is selected for payment?", name: 'Q1', options: question_belief_1_options, required: true },
+        { prompt: "Question 2: Suppose you estimate that 23% of the participants gave between 20 and 30 tokens. What will you earn if this decision is selected for payment?", name: 'Q2', options: question_belief_2_options, required: true },
         { prompt: "Question 3: You will receive your payment for this part of the experiment immediately.", name: 'Q3', options: question_belief_3_options, required: true }
     ],
     preamble: `<div> 
         <br><br/>
         Please answer the following questions to begin today's study. Scroll down to see all questions.</div>
-        <div>Consider the following table.</div>
+        <div>Consider the following situation.</div>
     </div>
     <br><br/>
-    <img class = 'img_questions' src="img/control/control_img_2.png"></img>
-    <br><br/>
-    <div>Suppose that 80% of the participants in the study selected action L in the table above.</div>
+    <div>Suppose that 20% of the participants in this study gave between 20 and 30 tokens when the exchange rate for self and other tokens was 1 to 1. </div>
     <br><br/>
     <div>Recall that the rule used to calculate your earnings for this part of the study is the following.</div>
     <div>
@@ -975,13 +965,13 @@ function startExperiment() {
             surveyQuestion,
             fullscreenEnter,
             choiceInstructions,
-            //controlQuestionsChoice,
+            controlQuestionsChoice,
             experimentOverview,
             choiceOverview,
             game_choice,
             breaktime,
             empiricalBeliefInstructions,
-            //controlQuestionsBelief,
+            controlQuestionsBelief,
             empiricalBeliefOverview,
             empirical_belief,
             normativeBeliefInstructions,
