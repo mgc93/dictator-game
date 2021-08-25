@@ -29,17 +29,21 @@
 // (done) add payment address, name etc. code
 // (done) payment variable in the code if failed any part
 // (done) add payment data to json file to make it easier to do the payment
-// replace index form with consent
 // (done) turn tokens to dollars
 // (done) update numbers in block overview
-// discuss the exchange rate 
+// (done) discuss the exchange rate 
 // fix typos
 // check data in browser is correct
 // (done) randomize block order for each subject
 // (done) change overview screen
-// change index consent form for no-eyetracking study
+// (done) change index consent form for no-eyetracking study
 // add bonus from give rate of another participant?
-// add new instructions - take out part about quiz for normative beliefs
+// (done) change info displayed about exchange rate
+// (done) change room to block
+// (done) change control questionnaire
+// (done) change and add new instructions
+// (done) change endowment to 100 always
+// (done) take out normative and empirical belief surveys
 
 
 
@@ -80,14 +84,24 @@ var randIndexBlock = jsPsych.randomization.shuffle(IndexBlock);
 generateExchangeRates = function(randIndexBlock){
     var vs_block_original = [1, 1, 2, 1, 3, 1, 4];
     var vo_block_original = [1, 2, 1, 3, 1, 4, 1];
-    var er_block_original = [1, 0.5, 2, 0.33, 3, 0.25, 4];
-    var er_block_bottom_original = [0.8, 0.3, 1.8, 0.13, 2.8, 0.05, 3.8];
-    var er_block_top_original = [1.2, 0.7, 2.2, 0.53, 3.2, 0.45, 4.2];
+    var er_block_original = [1, 2, 0.5, 3, 0.33, 4, 0.25];
+    var er_block_bottom_original = [0.8, 1.8, 0.3, 2.8, 0.13, 3.8, 0.05];
+    var er_block_top_original = [1.2, 2.2, 0.7, 3.2, 0.53, 4.2, 0.45];
+    var er_block_trial_exchange_rate = [
+        [1, 0.86, 0.96, 0.99, 1.03, 1.15, 0.85, 0.81, 1.17, 0.80, 1.09, 1.18, 1.12, 1.16, 1.20, 1.04, 1.10, 0.98, 1.14, 0.84],
+        [2, 2.19, 2.12, 1.92, 1.89, 1.85, 2.17, 1.90, 2.10, 1.82, 2.13, 1.83, 2.14, 1.93, 2.15, 2.18, 2.20, 1.95, 1.80, 2.04],
+        [0.5, 0.67, 0.53, 0.65, 0.30, 0.39, 0.44, 0.51, 0.35, 0.42, 0.54, 0.31, 0.70, 0.66, 0.41, 0.70, 0.64, 0.56, 0.32, 0.60],
+        [3, 2.90, 3.15, 3.04, 2.82, 3.05, 3.03, 2.83, 3.01, 2.84, 3.08, 2.93, 2.86, 3.10, 2.80, 2.88, 3.20, 2.87, 3.18, 2.81],
+        [0.33, 0.43, 0.48, 0.50, 0.20, 0.47, 0.29, 0.51, 0.36, 0.18, 0.15, 0.45, 0.52, 0.23, 0.21, 0.49, 0.44, 0.32, 0.13, 0.53],
+        [4, 3.82, 3.84, 4.18, 4.02, 3.88, 3.96, 3.93, 4.05, 3.87, 3.93, 3.80, 4.09, 3.89, 3.81, 4.20, 4.16, 4.01, 3.85, 3.96],
+        [0.25, 0.28, 0.44, 0.24, 0.20, 0.27, 0.08, 0.23, 0.15, 0.43, 0.06, 0.29, 0.41, 0.09, 0.05, 0.37, 0.30, 0.45, 0.07, 0.25]
+    ];
     var vs_block = [];
     var vo_block = [];
     var er_block = [];
     var er_block_top = [];
     var er_block_bottom = [];
+    var er_block_exchange_rate = [];
     // randomize order or blocks
     for (var i = 0; i < randIndexBlock.length; i++){
         vs_block.push(vs_block_original[randIndexBlock[i]]);
@@ -95,6 +109,7 @@ generateExchangeRates = function(randIndexBlock){
         er_block.push(er_block_original[randIndexBlock[i]]);
         er_block_bottom.push(er_block_bottom_original[randIndexBlock[i]]);
         er_block_top.push(er_block_top_original[randIndexBlock[i]]);
+        er_block_exchange_rate.push(er_block_trial_exchange_rate[randIndexBlock[i]]);
     }
 
     var labels = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
@@ -105,15 +120,17 @@ generateExchangeRates = function(randIndexBlock){
     for(var block = 0; block < nBlocks; block++){
         for(var trial = 0; trial < nTrialsBlock; trial++){
             var TrialDesign = new TrialDetails();
-            var er_trial = getRandomNumber(er_block_bottom[block],er_block_top[block]);
+            // add the exact exchange rate for the first trial
+            // var er_trial = getRandomNumber(er_block_bottom[block],er_block_top[block]);
+            var er_trial = er_block_exchange_rate[block][trial];
             var vs_trial = vs_block[block];
-            var vo_trial = vs_trial/er_trial;
+            var vo_trial = er_trial/vs_trial;
             var self_labels_trial = [];
             var other_labels_trial = [];
             for(var l = 0; l < labels.length; l++) {
-                self_labels_trial[l] = labels[l]*vs_trial; 
+                self_labels_trial[l] =  labels[l]; //labels[l]*vs_trial; 
                 self_labels_trial[l] = parseFloat(self_labels_trial[l].toFixed(0));
-                other_labels_trial[l] = labels[l]*vo_trial;
+                other_labels_trial[l] = labels[l]*er_trial; //labels[l]*vo_trial;
                 other_labels_trial[l] = parseFloat(other_labels_trial[l].toFixed(0));
             }
             TrialDesign.block = block;
@@ -159,7 +176,7 @@ var subject_id = jsPsych.randomization.randomID(7);
 
 /** load instructions images */
 var instructions_images = [];
-for (var i = 1; i < 26; i++) {
+for (var i = 1; i < 10; i++) {
     instructions_images.push('img/instructions/Slide' + i + '.png');
 }
 
@@ -355,7 +372,7 @@ var controlQuestionsChoice = {
     type: 'survey-multi-choice',
     questions: [
         { prompt: "Question 1: What is the maximum number of tokens that you can allocate to another anonymous participant?", name: 'Q1', options: question_choice_1_options, required: true },
-        { prompt: "Question 2: Suppose you decided to allocate 20 tokens to the other participant, as shown above. How many tokens will the other anonymous participant get?", name: 'Q2', options: question_choice_2_options, required: true },
+        { prompt: "Question 2: Suppose you decided to give 20 of your tokens to the other participant, as shown above. How many tokens will the other participant get?", name: 'Q2', options: question_choice_2_options, required: true },
         { prompt: "Question 3: Suppose you decided to allocate 20 tokens to the other participant, as shown above. How many tokens are you left with?", name: 'Q3', options: question_choice_3_options, required: true },
         { prompt: "Question 4: You will find out the identity of the other participant at the end of the experiment.", name: 'Q4', options: question_choice_4_options, required: true }
     ],
@@ -375,7 +392,7 @@ var controlQuestionsChoice = {
         if(nCorrectChoice<3){
             survey_code = makeSurveyCode('failed');
             closeFullscreen();
-            jsPsych.endExperiment(`We are sorry! Unfortunately, you have answered only ${nCorrectChoice} questions correctly.  </br> You will receive ${payFailQuiz1} for making it this far. Your survey code is: ${survey_code}${payFailQuiz1}. Thank you for signing up!`);
+            jsPsych.endExperiment(`We are sorry! Unfortunately, you have answered only ${nCorrectChoice} questions correctly.  </br> You will receive ${payFailQuiz1} for making it this far. Thank you for signing up!`);
             passedQuiz1 = 0;
         }
     }
@@ -387,7 +404,7 @@ var controlQuestionsChoice = {
 // choice overview
 var choiceOverview = {
     type: 'html-keyboard-response',
-    stimulus: `<div><font size=120%; font color = 'green';>Part 1 Task </font><br/>
+    stimulus: `<div><font size=120%; font color = 'green';>Task </font><br/>
                                         <br><br/>
             Each round, you will have to decide how to split a number of tokens between you and another anonymous participant. <br/>      
             To select how many tokens to give, click on the slider bar. <br/>
@@ -395,7 +412,8 @@ var choiceOverview = {
             <br><br/>
             When you are ready, press the  <b>SPACE BAR</b> to continue.  </div>`,
     choices: ['spacebar'],
-    post_trial_gap: 500
+    post_trial_gap: 500,
+    on_finish: () => document.body.style.cursor = 'pointer',
 }
 
 
@@ -411,14 +429,14 @@ var fixation1 = {
     on_finish: () => document.body.style.cursor = 'pointer',
 };
 
+// The average value for the self is <b><font color='green'>${ExpDesign[choice_count].vs_block}</font></b>.<br/>
+// The average value for the other is <b><font color='red'>${ExpDesign[choice_count].vo_block}</font></b>.<br/>
 var choice_count = 0;
 var blockOverview = {
     type: 'html-keyboard-response',
-    stimulus: () => `<div><font size=110%; font color = 'green';>Room ${ExpDesign[choice_count].block + 1} </font><br/>
+    stimulus: () => `<div><font size=110%; font color = 'green';>Block ${ExpDesign[choice_count].block + 1} </font><br/>
                                         <br><br/>
-            In this round the average exchange rate for self/other is <b><font size=120%;> ${ExpDesign[choice_count].er_block}</font></b> <br/>      
-            The average value for the self is <b><font color='green'>${ExpDesign[choice_count].vs_block}</font></b>.<br/>
-            The average value for the other is <b><font color='red'>${ExpDesign[choice_count].vo_block}</font></b>.<br/>
+            In this block, for each token you give, the other person gets <b><font size=120%;> ${ExpDesign[choice_count].er_block}</font></b> tokens on average<br/>      
             <br><br/>
             When you are ready, press the  <b>SPACE BAR</b> to continue.  </div>`,
     choices: ['spacebar'],
@@ -452,6 +470,8 @@ var if_node2 = {
 
 /** choices */
 // trial - dictator game
+// Value for the self: <b><font color='green'>${ExpDesign[choice_count].vs_trial}</font></b><br/>
+// Value for the other: <b><font color='red'>${parseFloat(ExpDesign[choice_count].vo_trial.toFixed(2))}</font></b><br/>
 var choice_data = [];
 var game_choice = {
     timeline: [
@@ -460,11 +480,9 @@ var game_choice = {
          if_node2,
         {
             type: "html-slider-response-dg",
-            stimulus: () => `<div><font size=100%; font color = 'green';>Room ${ExpDesign[choice_count].block + 1} </font><br/>
+            stimulus: () => `<div><font size=110%; font color = 'green';>Block ${ExpDesign[choice_count].block + 1} </font><br/>
                                         <br><br/>
-            Exchange rate for self/other: <b><font color='white';> ${ExpDesign[choice_count].er_trial}</font></b> <br/>      
-            Value for the self: <b><font color='green'>${ExpDesign[choice_count].vs_trial}</font></b><br/>
-            Value for the other: <b><font color='red'>${parseFloat(ExpDesign[choice_count].vo_trial.toFixed(2))}</font></b><br/>
+            Exchange rate: <b><font color='white';> ${ExpDesign[choice_count].er_trial}</font></b> <br/>      
             <br><br/>
             </div>`,
             block: () => ExpDesign[choice_count].block,
@@ -486,7 +504,7 @@ var game_choice = {
             }
         }      
     ],
-    loop_function: () => choice_count < 15, // change this to 70 after uploading
+    loop_function: () => choice_count < ExpDesign.length, // change this to 70 after uploading
 };
 
 
@@ -495,203 +513,203 @@ var game_choice = {
 
 
 
-/// break
-var breaktime = {
-    type: "html-keyboard-response",
-    stimulus: `<div>You are about halfway done! Now you can take a short break if you want.</br>
-                <br></br>
-                When you are ready to continue the study, press the <b>SPACE BAR</b>.</div>`,
-    choices: ['spacebar'],
-    post_trial_gap: 500,
-};
+// /// break
+// var breaktime = {
+//     type: "html-keyboard-response",
+//     stimulus: `<div>You are about halfway done! Now you can take a short break if you want.</br>
+//                 <br></br>
+//                 When you are ready to continue the study, press the <b>SPACE BAR</b>.</div>`,
+//     choices: ['spacebar'],
+//     post_trial_gap: 500,
+// };
 
 
 
 
-// instructions empirical belief task
-var empiricalBeliefInstructions = {
-    type: 'instructions',
-    pages: imgHTMLInstructions.slice(9,17),
-    show_clickable_nav: true,
-    on_finish: function () {
-        document.body.style.cursor = 'pointer'
-    }
-}
+// // instructions empirical belief task
+// var empiricalBeliefInstructions = {
+//     type: 'instructions',
+//     pages: imgHTMLInstructions.slice(9,17),
+//     show_clickable_nav: true,
+//     on_finish: function () {
+//         document.body.style.cursor = 'pointer'
+//     }
+// }
 
-// number of correct answers for control questions - belief task
-function getAnswersBeliefQuiz(belief_quiz_data){
-    var nCorrect = 0;
-    var responses = belief_quiz_data[0].responses.slice(1,belief_quiz_data[0].responses.length-1).split(',');
-    var correctAnswers = ["$5","$11","FALSE"];
-    for(var i = 0; i < responses.length; i++){
-        if(responses[i].includes(correctAnswers[i])){
-            nCorrect = nCorrect + 1;
-        } else {
-            nCorrect = nCorrect + 0;
-        }
-    }
-    return nCorrect;
-}
+// // number of correct answers for control questions - belief task
+// function getAnswersBeliefQuiz(belief_quiz_data){
+//     var nCorrect = 0;
+//     var responses = belief_quiz_data[0].responses.slice(1,belief_quiz_data[0].responses.length-1).split(',');
+//     var correctAnswers = ["$5","$11","FALSE"];
+//     for(var i = 0; i < responses.length; i++){
+//         if(responses[i].includes(correctAnswers[i])){
+//             nCorrect = nCorrect + 1;
+//         } else {
+//             nCorrect = nCorrect + 0;
+//         }
+//     }
+//     return nCorrect;
+// }
 
-// quiz about the belief task
-var question_belief_1_options = ["$11",
-                        "$9",
-                        "$7",
-                        "$5"];
-var question_belief_2_options = ["$11",
-                        "$9",
-                        "$7",
-                        "$5"];
-var question_belief_3_options = ["TRUE",
-                         "FALSE"];
+// // quiz about the belief task
+// var question_belief_1_options = ["$11",
+//                         "$9",
+//                         "$7",
+//                         "$5"];
+// var question_belief_2_options = ["$11",
+//                         "$9",
+//                         "$7",
+//                         "$5"];
+// var question_belief_3_options = ["TRUE",
+//                          "FALSE"];
 
-// still to finish
-var passedQuiz2 = 1;
-var belief_quiz_data = [];
-var controlQuestionsBelief = {
-    type: 'survey-multi-choice',
-    questions: [
-        { prompt: "Question 1: Suppose you estimate that 40% of the participants gave between 20 and 30 tokens. What will you earn if this decision is selected for payment?", name: 'Q1', options: question_belief_1_options, required: true },
-        { prompt: "Question 2: Suppose you estimate that 23% of the participants gave between 20 and 30 tokens. What will you earn if this decision is selected for payment?", name: 'Q2', options: question_belief_2_options, required: true },
-        { prompt: "Question 3: You will receive your payment for this part of the experiment immediately.", name: 'Q3', options: question_belief_3_options, required: true }
-    ],
-    preamble: `<div> 
-        <br><br/>
-        Please answer the following questions to begin today's study. Scroll down to see all questions.</div>
-        <div>Consider the following situation.</div>
-    </div>
-    <br><br/>
-    <div>Suppose that 20% of the participants in this study gave between 20 and 30 tokens when the exchange rate for self and other tokens was 1 to 1. </div>
-    <br><br/>
-    <div>Recall that the rule used to calculate your earnings for this part of the study is the following.</div>
-    <div>
-            <div>If your estimate is within 5% of the correct answer you earn $11</div>
-            <div>If your estimate is between 5% and 10% of the correct answer you earn $9</div>
-            <div>If your estimate is between 10% and 15% of the correct answer you earn $7</div>
-            <div>Otherwise you earn $5</div>
-    </div>
-    <br><br/>`,
-    on_finish: function (data) {
-        belief_quiz_data.push(data);
-        document.body.style.cursor = 'none';
-        nCorrectBelief = getAnswersBeliefQuiz(belief_quiz_data);
-        if(nCorrectBelief<2){
-            survey_code = makeSurveyCode('failed');
-            closeFullscreen();
-            jsPsych.endExperiment(`We are sorry! Unfortunately, you have answered only ${nCorrectBelief} questions correctly.  </br> You will receive  ${payFailQuiz2} for making it this far. Your survey code is: ${survey_code}${payFailQuiz2}. Thank you for signing up!`);
-            passedQuiz2 = 0;
-        }
-    }
-};
-
-
-// empirical belief overview
-var empiricalBeliefOverview = {
-    type: 'html-keyboard-response',
-    stimulus: `<div><font size=120%; font color = 'green';>Part 2 Task </font><br/>
-                                        <br><br/>
-            Each round, you will answer questions in a survey. <br/>  
-            You can make your responses by clicking on the slider bars. <br/>
-            When you are sure of your response, you can click the <b><font color='green'>CONTINUE</font></b> button. <br/>
-            <br><br/>
-            When you are ready, press the  <b>SPACE BAR</b> to continue.  </div>`,
-    choices: ['spacebar'],
-    post_trial_gap: 500,
-    on_finish: function () {
-        document.body.style.cursor = 'pointer';
-    }
-}
+// // still to finish
+// var passedQuiz2 = 1;
+// var belief_quiz_data = [];
+// var controlQuestionsBelief = {
+//     type: 'survey-multi-choice',
+//     questions: [
+//         { prompt: "Question 1: Suppose you estimate that 40% of the participants gave between 20 and 30 tokens. What will you earn if this decision is selected for payment?", name: 'Q1', options: question_belief_1_options, required: true },
+//         { prompt: "Question 2: Suppose you estimate that 23% of the participants gave between 20 and 30 tokens. What will you earn if this decision is selected for payment?", name: 'Q2', options: question_belief_2_options, required: true },
+//         { prompt: "Question 3: You will receive your payment for this part of the experiment immediately.", name: 'Q3', options: question_belief_3_options, required: true }
+//     ],
+//     preamble: `<div> 
+//         <br><br/>
+//         Please answer the following questions to begin today's study. Scroll down to see all questions.</div>
+//         <div>Consider the following situation.</div>
+//     </div>
+//     <br><br/>
+//     <div>Suppose that 20% of the participants in this study gave between 20 and 30 tokens when the exchange rate for self and other tokens was 1 to 1. </div>
+//     <br><br/>
+//     <div>Recall that the rule used to calculate your earnings for this part of the study is the following.</div>
+//     <div>
+//             <div>If your estimate is within 5% of the correct answer you earn $11</div>
+//             <div>If your estimate is between 5% and 10% of the correct answer you earn $9</div>
+//             <div>If your estimate is between 10% and 15% of the correct answer you earn $7</div>
+//             <div>Otherwise you earn $5</div>
+//     </div>
+//     <br><br/>`,
+//     on_finish: function (data) {
+//         belief_quiz_data.push(data);
+//         document.body.style.cursor = 'none';
+//         nCorrectBelief = getAnswersBeliefQuiz(belief_quiz_data);
+//         if(nCorrectBelief<2){
+//             survey_code = makeSurveyCode('failed');
+//             closeFullscreen();
+//             jsPsych.endExperiment(`We are sorry! Unfortunately, you have answered only ${nCorrectBelief} questions correctly.  </br> You will receive  ${payFailQuiz2} for making it this far. Your survey code is: ${survey_code}${payFailQuiz2}. Thank you for signing up!`);
+//             passedQuiz2 = 0;
+//         }
+//     }
+// };
 
 
-// vself x labels [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
-// vother x labels - how much the other receives 
-function getPromptLabels(){
-    // get labels for each block
-    var labels = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
-    var vs_block = [1, 1, 2, 1, 3, 1, 4];
-    var vo_block = [1, 2, 1, 3, 1, 4, 1];
-    var startStringGive = [`Gave [`];
-    var startStringReceive = [`Received [`];
-    var endString = [`)`];
-    var endStringLast = [`]`];
-    var elements = [];
-    var elementsGive = [];
-    var elementsReceive = [];
-    var nBlocks = vs_block.length;
-    var promptLabels = [];
-    var promptLabelsGive = [];
-    var promptLabelsReceive = [];
-    for(var block = 0; block < nBlocks; block++){
-        promptLabels.push([]);
-        promptLabelsGive.push([]);
-        promptLabelsReceive.push([]);
-    }
-    for(var block = 0; block < nBlocks; block++){
-        // create labels for block
-        var self_labels_block = [];
-        var other_labels_block = [];
-        for(var l = 0; l < labels.length; l++) {
-            self_labels_block[l] = labels[l]*vs_block[block]; 
-            self_labels_block[l] = self_labels_block[l].toFixed(0);
-            other_labels_block[l] = labels[l]*vo_block[block];
-            other_labels_block[l] = other_labels_block[l].toFixed(0); 
-        }
-        // create prompt give labels for block
-        for(var i = 0; i <= 9; i++){
-            if(i!==9){
-                elementsGive[i] = startStringGive.concat(self_labels_block[i],', ',self_labels_block[i+1],endString);
-            }
-            else {
-                elementsGive[i] = startStringGive.concat(self_labels_block[i],', ',self_labels_block[i+1],endStringLast);
-            }
-            promptLabelsGive[block].push(elementsGive[i].join(''));
-        }
-        // create prompt receive labels for block
-        for(var i = 0; i <= 9; i++){
-            if(i!==9){
-                elementsReceive[i] = startStringReceive.concat(other_labels_block[i],', ',other_labels_block[i+1],endString);
-            }
-            else {
-                elementsReceive[i] = startStringReceive.concat(other_labels_block[i],', ',other_labels_block[i+1],endStringLast);
-            }
-            promptLabelsReceive[block].push(elementsReceive[i].join(''));
-        }
-        // concatenate give receive labels
-        for(var i = 0; i <= 9; i++){
-            elements[i] = promptLabelsGive[block][i].concat(' - ',promptLabelsReceive[block][i]);
-            promptLabels[block].push(elements[i]);
-        }
-    }
-
-    return promptLabels;
-}
-
-var promptLabels = getPromptLabels();
-
-// get question labels: B_x_Q_y 
-function getQuestionLabels(){
-    var nBlocks = 7;
-    var blockString = [`B`];
-    var questionString = [`Q`];
-    var questionLabels = [];
-    var elements = [];
-    for(var block = 0; block < nBlocks; block++){
-        questionLabels.push([]);
-    }
-    // create labels for questions: B_x_Q_y
-    for(var block = 0; block < nBlocks; block++){
-        for(var q = 0; q < 10; q++) {
-            elements[q] = blockString.concat((block+1).toString(),questionString,(q+1).toString());
-            questionLabels[block].push(elements[q].join(''));
-        }
-    }
-    return questionLabels;
-}
-
-var questionLabels = getQuestionLabels();
+// // empirical belief overview
+// var empiricalBeliefOverview = {
+//     type: 'html-keyboard-response',
+//     stimulus: `<div><font size=120%; font color = 'green';>Part 2 Task </font><br/>
+//                                         <br><br/>
+//             Each round, you will answer questions in a survey. <br/>  
+//             You can make your responses by clicking on the slider bars. <br/>
+//             When you are sure of your response, you can click the <b><font color='green'>CONTINUE</font></b> button. <br/>
+//             <br><br/>
+//             When you are ready, press the  <b>SPACE BAR</b> to continue.  </div>`,
+//     choices: ['spacebar'],
+//     post_trial_gap: 500,
+//     on_finish: function () {
+//         document.body.style.cursor = 'pointer';
+//     }
+// }
 
 
+// // vself x labels [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+// // vother x labels - how much the other receives 
+// function getPromptLabels(){
+//     // get labels for each block
+//     var labels = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
+//     var vs_block = [1, 1, 2, 1, 3, 1, 4];
+//     var vo_block = [1, 2, 1, 3, 1, 4, 1];
+//     var startStringGive = [`Gave [`];
+//     var startStringReceive = [`Received [`];
+//     var endString = [`)`];
+//     var endStringLast = [`]`];
+//     var elements = [];
+//     var elementsGive = [];
+//     var elementsReceive = [];
+//     var nBlocks = vs_block.length;
+//     var promptLabels = [];
+//     var promptLabelsGive = [];
+//     var promptLabelsReceive = [];
+//     for(var block = 0; block < nBlocks; block++){
+//         promptLabels.push([]);
+//         promptLabelsGive.push([]);
+//         promptLabelsReceive.push([]);
+//     }
+//     for(var block = 0; block < nBlocks; block++){
+//         // create labels for block
+//         var self_labels_block = [];
+//         var other_labels_block = [];
+//         for(var l = 0; l < labels.length; l++) {
+//             self_labels_block[l] = labels[l]*vs_block[block]; 
+//             self_labels_block[l] = self_labels_block[l].toFixed(0);
+//             other_labels_block[l] = labels[l]*vo_block[block];
+//             other_labels_block[l] = other_labels_block[l].toFixed(0); 
+//         }
+//         // create prompt give labels for block
+//         for(var i = 0; i <= 9; i++){
+//             if(i!==9){
+//                 elementsGive[i] = startStringGive.concat(self_labels_block[i],', ',self_labels_block[i+1],endString);
+//             }
+//             else {
+//                 elementsGive[i] = startStringGive.concat(self_labels_block[i],', ',self_labels_block[i+1],endStringLast);
+//             }
+//             promptLabelsGive[block].push(elementsGive[i].join(''));
+//         }
+//         // create prompt receive labels for block
+//         for(var i = 0; i <= 9; i++){
+//             if(i!==9){
+//                 elementsReceive[i] = startStringReceive.concat(other_labels_block[i],', ',other_labels_block[i+1],endString);
+//             }
+//             else {
+//                 elementsReceive[i] = startStringReceive.concat(other_labels_block[i],', ',other_labels_block[i+1],endStringLast);
+//             }
+//             promptLabelsReceive[block].push(elementsReceive[i].join(''));
+//         }
+//         // concatenate give receive labels
+//         for(var i = 0; i <= 9; i++){
+//             elements[i] = promptLabelsGive[block][i].concat(' - ',promptLabelsReceive[block][i]);
+//             promptLabels[block].push(elements[i]);
+//         }
+//     }
 
+//     return promptLabels;
+// }
+
+// var promptLabels = getPromptLabels();
+
+// // get question labels: B_x_Q_y 
+// function getQuestionLabels(){
+//     var nBlocks = 7;
+//     var blockString = [`B`];
+//     var questionString = [`Q`];
+//     var questionLabels = [];
+//     var elements = [];
+//     for(var block = 0; block < nBlocks; block++){
+//         questionLabels.push([]);
+//     }
+//     // create labels for questions: B_x_Q_y
+//     for(var block = 0; block < nBlocks; block++){
+//         for(var q = 0; q < 10; q++) {
+//             elements[q] = blockString.concat((block+1).toString(),questionString,(q+1).toString());
+//             questionLabels[block].push(elements[q].join(''));
+//         }
+//     }
+//     return questionLabels;
+// }
+
+// var questionLabels = getQuestionLabels();
+
+
+// not used
 // var empiricalBeliefSurvey = {
 //     type: 'survey-likert-slider',
 //     questions: [
@@ -721,114 +739,114 @@ var questionLabels = getQuestionLabels();
 //     }
 //   };
 
-var vs_block = [1, 1, 2, 1, 3, 1, 4];
-var vo_block = [1, 2, 1, 3, 1, 4, 1];
-var er_block = [1, 0.5, 2, 0.33, 3, 0.25, 4];
-var promptLabelsBlock = [];
-var questionLabelsBlock = [];
-var block_emp = 0;
-var empirical_belief_data = [];
-var empirical_belief = {
-    timeline: [
-        {
-            type: 'survey-likert-slider',
-            questions: () => [
-                {prompt: promptLabels[block_emp][0], name: questionLabels[block_emp][0]},
-                {prompt: promptLabels[block_emp][1], name: questionLabels[block_emp][1]},
-                {prompt: promptLabels[block_emp][2], name: questionLabels[block_emp][2]},
-                {prompt: promptLabels[block_emp][3], name: questionLabels[block_emp][3]},
-                {prompt: promptLabels[block_emp][4], name: questionLabels[block_emp][4]},
-                {prompt: promptLabels[block_emp][5], name: questionLabels[block_emp][5]},
-                {prompt: promptLabels[block_emp][6], name: questionLabels[block_emp][6]},
-                {prompt: promptLabels[block_emp][7], name: questionLabels[block_emp][7]},
-                {prompt: promptLabels[block_emp][8], name: questionLabels[block_emp][8]},
-                {prompt: promptLabels[block_emp][9], name: questionLabels[block_emp][9]},
-            ],
-            randomize_question_order: false,
-            scale_width: 50,
-            preamble: () => `<div> 
-                <br><br/>
-                The average exchange rate for self/other was <b><font size=120%;> ${er_block[block_emp]}</font></b> <br/>      
-                The average value for the self was <b><font color='green'>${vs_block[block_emp]}</font></b>.<br/>
-                The average value for the other was <b><font color='red'>${vo_block[block_emp]}</font></b>.<br/>
-                <br><br/>
-                Please stimate the proportion of Give rates <br>
-                <br><br/>
-                </div>`,
-            on_finish: function (data) {
-                empirical_belief_data.push(data);
-                block_emp++;
-            }
-        }      
-        ],
-        loop_function: () => block_emp < 7, 
-};
+// var vs_block = [1, 1, 2, 1, 3, 1, 4];
+// var vo_block = [1, 2, 1, 3, 1, 4, 1];
+// var er_block = [1, 0.5, 2, 0.33, 3, 0.25, 4];
+// var promptLabelsBlock = [];
+// var questionLabelsBlock = [];
+// var block_emp = 0;
+// var empirical_belief_data = [];
+// var empirical_belief = {
+//     timeline: [
+//         {
+//             type: 'survey-likert-slider',
+//             questions: () => [
+//                 {prompt: promptLabels[block_emp][0], name: questionLabels[block_emp][0]},
+//                 {prompt: promptLabels[block_emp][1], name: questionLabels[block_emp][1]},
+//                 {prompt: promptLabels[block_emp][2], name: questionLabels[block_emp][2]},
+//                 {prompt: promptLabels[block_emp][3], name: questionLabels[block_emp][3]},
+//                 {prompt: promptLabels[block_emp][4], name: questionLabels[block_emp][4]},
+//                 {prompt: promptLabels[block_emp][5], name: questionLabels[block_emp][5]},
+//                 {prompt: promptLabels[block_emp][6], name: questionLabels[block_emp][6]},
+//                 {prompt: promptLabels[block_emp][7], name: questionLabels[block_emp][7]},
+//                 {prompt: promptLabels[block_emp][8], name: questionLabels[block_emp][8]},
+//                 {prompt: promptLabels[block_emp][9], name: questionLabels[block_emp][9]},
+//             ],
+//             randomize_question_order: false,
+//             scale_width: 50,
+//             preamble: () => `<div> 
+//                 <br><br/>
+//                 The average exchange rate for self/other was <b><font size=120%;> ${er_block[block_emp]}</font></b> <br/>      
+//                 The average value for the self was <b><font color='green'>${vs_block[block_emp]}</font></b>.<br/>
+//                 The average value for the other was <b><font color='red'>${vo_block[block_emp]}</font></b>.<br/>
+//                 <br><br/>
+//                 Please stimate the proportion of Give rates <br>
+//                 <br><br/>
+//                 </div>`,
+//             on_finish: function (data) {
+//                 empirical_belief_data.push(data);
+//                 block_emp++;
+//             }
+//         }      
+//         ],
+//         loop_function: () => block_emp < 7, 
+// };
 
-// instructions normative belief task
-var normativeBeliefInstructions = {
-    type: 'instructions',
-    pages: imgHTMLInstructions.slice(17,25),
-    show_clickable_nav: true,
-    on_finish: function () {
-        document.body.style.cursor = 'pointer'
-    }
-}
+// // instructions normative belief task
+// var normativeBeliefInstructions = {
+//     type: 'instructions',
+//     pages: imgHTMLInstructions.slice(17,25),
+//     show_clickable_nav: true,
+//     on_finish: function () {
+//         document.body.style.cursor = 'pointer'
+//     }
+// }
 
-// normative belief overview
-var normativeBeliefOverview = {
-    type: 'html-keyboard-response',
-    stimulus: `<div><font size=120%; font color = 'green';>Part 3 Task </font><br/>
-    <br><br/>
-    Each round, you will answer questions in a survey. <br/>  
-    You can make your responses by clicking on the slider bars. <br/>
-    When you are sure of your response, you can click the <b><font color='green'>CONTINUE</font></b> button. <br/>
-    <br><br/>
-    When you are ready, press the  <b>SPACE BAR</b> to continue.  </div>`,
-    choices: ['spacebar'],
-    post_trial_gap: 500,
-    on_finish: function () {
-        document.body.style.cursor = 'pointer';
-    }
-}
+// // normative belief overview
+// var normativeBeliefOverview = {
+//     type: 'html-keyboard-response',
+//     stimulus: `<div><font size=120%; font color = 'green';>Part 3 Task </font><br/>
+//     <br><br/>
+//     Each round, you will answer questions in a survey. <br/>  
+//     You can make your responses by clicking on the slider bars. <br/>
+//     When you are sure of your response, you can click the <b><font color='green'>CONTINUE</font></b> button. <br/>
+//     <br><br/>
+//     When you are ready, press the  <b>SPACE BAR</b> to continue.  </div>`,
+//     choices: ['spacebar'],
+//     post_trial_gap: 500,
+//     on_finish: function () {
+//         document.body.style.cursor = 'pointer';
+//     }
+// }
 
 
-var block_norm = 0;
-var normative_belief_data = [];
-var normative_belief = {
-    timeline: [
-        {
-            type: 'survey-likert-slider',
-            questions: () => [
-                {prompt: promptLabels[block_norm][0], name: questionLabels[block_norm][0]},
-                {prompt: promptLabels[block_norm][1], name: questionLabels[block_norm][1]},
-                {prompt: promptLabels[block_norm][2], name: questionLabels[block_norm][2]},
-                {prompt: promptLabels[block_norm][3], name: questionLabels[block_norm][3]},
-                {prompt: promptLabels[block_norm][4], name: questionLabels[block_norm][4]},
-                {prompt: promptLabels[block_norm][5], name: questionLabels[block_norm][5]},
-                {prompt: promptLabels[block_norm][6], name: questionLabels[block_norm][6]},
-                {prompt: promptLabels[block_norm][7], name: questionLabels[block_norm][7]},
-                {prompt: promptLabels[block_norm][8], name: questionLabels[block_norm][8]},
-                {prompt: promptLabels[block_norm][9], name: questionLabels[block_norm][9]},
-            ],
-            randomize_question_order: false,
-            scale_width: 50,
-            preamble: () => `<div> 
-                <br><br/>
-                The average exchange rate for self/other was <b><font size=120%;> ${er_block[block_norm]}</font></b> <br/>      
-                The average value for the self was <b><font color='green'>${vs_block[block_norm]}</font></b>.<br/>
-                The average value for the other was <b><font color='red'>${vo_block[block_norm]}</font></b>.<br/>
-                <br><br/>
-                Please stimate the appropriateness of each Give rate <br>
-                <br><br/>
-                </div>`,
-            on_finish: function (data) {
-                normative_belief_data.push(data);
-                block_norm++;
-            }
-        }      
-        ],
-        loop_function: () => block_norm < 7, 
-};
+// var block_norm = 0;
+// var normative_belief_data = [];
+// var normative_belief = {
+//     timeline: [
+//         {
+//             type: 'survey-likert-slider',
+//             questions: () => [
+//                 {prompt: promptLabels[block_norm][0], name: questionLabels[block_norm][0]},
+//                 {prompt: promptLabels[block_norm][1], name: questionLabels[block_norm][1]},
+//                 {prompt: promptLabels[block_norm][2], name: questionLabels[block_norm][2]},
+//                 {prompt: promptLabels[block_norm][3], name: questionLabels[block_norm][3]},
+//                 {prompt: promptLabels[block_norm][4], name: questionLabels[block_norm][4]},
+//                 {prompt: promptLabels[block_norm][5], name: questionLabels[block_norm][5]},
+//                 {prompt: promptLabels[block_norm][6], name: questionLabels[block_norm][6]},
+//                 {prompt: promptLabels[block_norm][7], name: questionLabels[block_norm][7]},
+//                 {prompt: promptLabels[block_norm][8], name: questionLabels[block_norm][8]},
+//                 {prompt: promptLabels[block_norm][9], name: questionLabels[block_norm][9]},
+//             ],
+//             randomize_question_order: false,
+//             scale_width: 50,
+//             preamble: () => `<div> 
+//                 <br><br/>
+//                 The average exchange rate for self/other was <b><font size=120%;> ${er_block[block_norm]}</font></b> <br/>      
+//                 The average value for the self was <b><font color='green'>${vs_block[block_norm]}</font></b>.<br/>
+//                 The average value for the other was <b><font color='red'>${vo_block[block_norm]}</font></b>.<br/>
+//                 <br><br/>
+//                 Please stimate the appropriateness of each Give rate <br>
+//                 <br><br/>
+//                 </div>`,
+//             on_finish: function (data) {
+//                 normative_belief_data.push(data);
+//                 block_norm++;
+//             }
+//         }      
+//         ],
+//         loop_function: () => block_norm < 7, 
+// };
 
 // var select_trial = {
 //   type: "",
@@ -881,14 +899,13 @@ function getFinalPay(choice_data){
     var nTrials = choice_data.length;
     var randTrial = getRandomInt(0,nTrials);
     var givenTrial = choice_data[randTrial].response;
-    var value_self_trial = choice_data[randTrial].value_self_trial;
-    var value_other_trial = choice_data[randTrial].value_other_trial;
-    var payOtherTrial = givenTrial*value_other_trial;
-    var paySelfTrial = (100-givenTrial)*value_self_trial;
-    return [parseFloat(paySelfTrial.toFixed(0)),parseFloat(payOtherTrial.toFixed(0))];
+    var exchange_rate_trial = choice_data[randTrial].exchange_rate_trial;
+    var payOtherTrial = givenTrial*exchange_rate_trial;
+    var paySelfTrial = (100-givenTrial);
+    return [parseFloat(paySelfTrial.toFixed(0)),parseFloat(payOtherTrial.toFixed(0)),exchange_rate_trial];
 }
 
-var finalPay = [0, 0];
+var finalPay = [0, 0, 0];
 var successExp = false;
 var success_guard = {
     type: 'call-function',
@@ -927,9 +944,10 @@ var on_finish_callback = function () {
         subject: subject_id,
         interaction: jsPsych.data.getInteractionData().json(),
         pass_quiz_1: passedQuiz1,
-        pass_quiz_2: passedQuiz2,
+        // pass_quiz_2: passedQuiz2,
         payment_self: finalPay[0],
         payment_other: finalPay[1],
+        payment_trial: finalPay[2],
         windowWidth: screen.width,
         windowHight: screen.height
     });
@@ -955,7 +973,7 @@ var trialcounter;
 
 
 
-
+//Your survey code is: ${makeSurveyCode('success')}${finalPay[0]}. </br>
 function startExperiment() {
     jsPsych.init({
         timeline: [
@@ -969,14 +987,14 @@ function startExperiment() {
             experimentOverview,
             choiceOverview,
             game_choice,
-            breaktime,
-            empiricalBeliefInstructions,
-            controlQuestionsBelief,
-            empiricalBeliefOverview,
-            empirical_belief,
-            normativeBeliefInstructions,
-            normativeBeliefOverview,
-            normative_belief,
+            // breaktime,
+            // empiricalBeliefInstructions,
+            // controlQuestionsBelief,
+            // empiricalBeliefOverview,
+            // empirical_belief,
+            // normativeBeliefInstructions,
+            // normativeBeliefOverview,
+            // normative_belief,
             success_guard
         ],
         on_trial_finish: function () {
@@ -987,12 +1005,13 @@ function startExperiment() {
                 jsPsych.endExperiment(`<div>
                 Thank you for your participation! You can close the browser to end the experiment now. </br>
                 We selected one random trial for payment. </br>
+                The selected trial had an exchange rate of ${finalPay[2]}. </br>
                 You chose to give ${finalPay[1]} tokens to another participant and kept ${finalPay[0]} tokens. </br>
-                Your earnings are ${finalPay[0]/10} dollars. </br> 
+                Your earnings are ${parseFloat(finalPay[0]*0.05).toFixed(2)} dollars. </br> 
+                You gave ${parseFloat(finalPay[1]*0.05).toFixed(2)} dollars to another participant. </br> 
                 <br></br>
-                We will send you ${finalPay[0]/10} dollars soon! </br> 
-                We will send you the bonus payments for Part 2 or Part 3 within the next 2 weeks. </br>
-                Your survey code is: ${makeSurveyCode('success')}${finalPay[0]}. </br>
+                We will send you ${parseFloat(finalPay[0]*0.05).toFixed(2)} dollars soon! </br> 
+                We will send you the additional payment from another person's decision within the next 2 weeks. </br>
                 </div>`);
             }
             if (trialcounter == 30) { 
