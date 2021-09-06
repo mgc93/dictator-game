@@ -1,0 +1,116 @@
+.jspsych-display-element {
+  margin: 0px; 
+  height: 100%; 
+  width: 100%; 
+}
+
+
+#jspsych-html-slider-response-stimulus{
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, 0%);
+}
+
+.jspsych-html-slider-response-container {
+  /* position:relative;  */
+  position: fixed;
+  margin: 0 auto 3em auto;
+  height: 20vh; 
+  width: 80vw;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, 0%);
+}
+
+span #labels {
+  text-align: center; 
+  font-size: 80%;
+  color: white;
+}
+
+
+
+#prompt-question {
+  position: fixed;
+  top: 70%;
+  left: 50%;
+  transform: translate(-50%, 0%);
+}
+
+#jspsych-html-slider-response-next{
+  position: fixed;
+  top: 80%;
+  left: 50%;
+  transform: translate(-50%, 0%);
+}
+
+
+/* span #slidertitle {
+    display: none;
+    position: absolute;
+    cursor: default;
+    top: 0;
+    left: 0;
+    color: white; 
+  }
+  
+#jspsych-html-slider-response-container:hover > #slidertitle {
+    display: block;
+  } */
+
+  .jspsych-html-slider-response-container .sliderValue{
+    position:relative;
+    width:100%;
+  }
+
+  .jspsych-html-slider-response-container .sliderValue span{
+    position: absolute;
+    height:45px;
+    width:380px;
+    color: white;
+    font-weight: 500;
+    top: -60px;
+    transform: translateX(-50%) scale(1);
+    transform-origin: bottom;
+    transition: transform 0.3s ease-in-out;
+    line-height: 55px;
+    z-index: 2;
+  }
+  .jspsych-html-slider-response-container .sliderValue span:after{
+    position: absolute;
+    content: "";
+    height:45px;
+    width:45px;
+    background: red;
+    left:50%;
+    transform: translateX(-50%) rotate(45deg);
+    border:solid 3px #fff;
+    z-index: -1;
+    border-top-left-radius: 50%;
+    border-top-right-radius: 50%;
+    border-bottom-left-radius: 50%;
+  }
+
+  .jspsych-html-slider-response-container .field input{
+    -webkit-appearance: none;
+    height:3px;
+    background:#ddd;
+    border-radius: 5px;
+    outline:none;
+    border:none;
+    width:100%;
+  }
+  .jspsych-html-slider-response-container .field input::-webkit-slider-thumb{
+    -webkit-appearance: none;
+    height: 20px;
+    width: 20px;
+    background: black;
+    border-radius: 50%;
+    border: 1px solid #664AFF;
+    cursor: pointer;
+  }
+
+  .jspsych-html-slider-response-container .sliderValue span.show{
+    transform: translateX(-50%) scale(1);
+  }
