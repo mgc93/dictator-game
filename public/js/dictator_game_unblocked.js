@@ -215,7 +215,7 @@ var surveyQuestion = {
         { prompt: "What's your age?", rows: 1, columns: 50, required: true },
         { prompt: "What's your gender?", rows: 1, columns: 50, require: true },
     ],
-    preamble: `<div>Thanks for choosing our experiment! Please answer the following questions to begin today's study. </div>`,
+    preamble: `<div>Please answer the following questions to begin today's study. </div>`,
 };
 
 
