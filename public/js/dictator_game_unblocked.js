@@ -459,7 +459,7 @@ var game_choice = {
             }
         }      
     ],
-    loop_function: () => choice_count < 25 //ExpDesign.length, // change this to 70 after uploading
+    loop_function: () => choice_count < ExpDesign.length, // change this to 70 after uploading
 };
 
 
