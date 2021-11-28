@@ -4,6 +4,7 @@
 // add number of trials to instructions
 // (done) fix typos in the control questionnaire
 // new slider
+// change index consent form
 
 /***********************/
 /******** Design *******/
@@ -549,7 +550,6 @@ var trialcounter;
 
 
 
-//Your survey code is: ${makeSurveyCode('success')}${finalPay[0]}. </br>
 function startExperiment() {
     jsPsych.init({
         timeline: [
@@ -580,6 +580,7 @@ function startExperiment() {
                 <br></br>
                 We will send you ${parseFloat(finalPay[0]*0.05).toFixed(2)} dollars soon! </br> 
                 We will send you the additional payment from another person's decision within the next 2 weeks. </br>
+                Your survey code is: ${makeSurveyCode('success')}. </br>
                 </div>`);
             }
             if (trialcounter == 30) { 
