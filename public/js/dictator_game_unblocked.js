@@ -579,7 +579,7 @@ function startExperiment() {
                 Your earnings are ${parseFloat(finalPay[0]*0.05).toFixed(2)} dollars. </br> 
                 You gave ${parseFloat(finalPay[1]*0.05).toFixed(2)} dollars to another participant. </br> 
                 <br></br>
-                We will send you ${parseFloat(finalPay[0]*0.05).toFixed(2)} dollars and the $5 show-up fee soon! </br> 
+                We will send you ${parseFloat(finalPay[0]*0.05).toFixed(2)} dollars and the 3 dollars show-up fee soon! </br> 
                 We will send you the additional payment from another person's decision within the next 2 weeks. </br>
                 Your survey code is: ${makeSurveyCode('success')}. </br>
                 </div>`);
