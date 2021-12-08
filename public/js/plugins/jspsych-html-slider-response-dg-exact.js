@@ -266,7 +266,7 @@ jsPsych.plugins['html-slider-response-dg-exact'] = (function() {
             const max = range.max ? range.max : 100;
             const newVal = Number(((val - min) * 100) / (max - min));
             var val_other = val*trial.exchange_rate_trial;
-            bubble.innerHTML = val_other.toFixed(3);
+            bubble.innerHTML = val_other.toFixed(2);
             // Sorta magic numbers based on size of the native UI thumb
             bubble.style.left = `calc(${newVal}% + (${8 - newVal * 0.15}px))`;
         }
