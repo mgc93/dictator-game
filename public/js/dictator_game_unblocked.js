@@ -6,6 +6,11 @@
 // (done) new slider
 // (done) change index consent form
 // (done) change exchange rate in the code and in the instructions
+// (done) remove zelle from payment option
+// (done) replace partner with other participant in instructions
+// (done) get rid of sliderbar answer repetitions in instructions
+// (done) make slider something you have to first click on to advance
+
 
 /***********************/
 /******** Design *******/
@@ -201,8 +206,7 @@ var paymentInfo = {
 };
 
 var payment_options = ["Venmo",
-                        "Paypal",
-                        "Zelle"];
+                        "Paypal"];
 
 var payment_data = [];
                         
@@ -468,6 +472,7 @@ var game_choice = {
             er_interval_top_block: () => ExpDesign[choice_count].er_top_block,
             labels_top: () => ExpDesign[choice_count].other_labels_trial,  // other 
             labels_bottom: () => ExpDesign[choice_count].self_labels_trial, // self
+            require_movement: true,
             prompt: `<p id = "prompt-question"> How much do you want to give? </p>`,
             on_finish: function (data) {
                 choice_data.push(data);
