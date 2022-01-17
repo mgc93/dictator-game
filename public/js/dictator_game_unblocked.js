@@ -198,7 +198,7 @@ function uploadSubjectStatus(status) {
 
 var paymentInfo = {
     type: 'html-keyboard-response',
-    stimulus: `<div> In order to receive payment for this study, you will need to provide Venmo/Paypal or Zelle information. <br/>
+    stimulus: `<div> In order to receive payment for this study, you will need to provide Venmo/Paypal information. <br/>
                 <br><br/>
                 When you are ready, press the SPACE BAR to continue. </div>`,
     post_trial_gap: 500,
